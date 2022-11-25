@@ -3,11 +3,13 @@ from bs4 import BeautifulSoup
 import csv 
 import pandas as pd 
 import urllib
+from io import StringIO
+import os
+
 
 class YahooFinanceHistory_60days:
   _url = 'https://hk.finance.yahoo.com/quote/%s.HK/history?p=%s.HK'
   
-  def get_data(self, code):
     
     
     
