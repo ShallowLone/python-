@@ -1,7 +1,7 @@
 import tkinter as tk
 import yf
 
-def dl:
+def dl():
   try:
     code = ent.get()
     df = yf.YahooFinanceHistory().get_data(code)
@@ -17,7 +17,7 @@ window.title('History record downloader')
 tk.Label(window, text = 'Please input the num of the stock').pack()
 ent = tk.Entry(window)
 ent.pack()
-tk.Button(window, text='Start to download', command = download).pack()
+tk.Button(window, text='Start to download', command = dl).pack()
 lbl = tk.Label(window, width = 60, height = 10)
 lbl.pack()
 window.mainloop()
