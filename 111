@@ -1,0 +1,57 @@
+import tkinter as tk
+from tkinter import filedialog
+import requests
+from bs4 import BeautifulSoup
+import csv
+import pandas as pd
+import os
+import datetime
+import time
+
+class YahooFinanceHistory_60days:
+_url = 'https://hk.finance.yahoo.com/quote/{code}.HK/history?p={code}.HK'
+
+def get_data(self, code):
+url = self._url.format(code = code)
+web = requests.get(url, headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15(KHTML, like Gecko) Version/14.1.2 Safari/605.1.15'})
+web.raise_for_status()
+soup = BeautifulSoup(web.text,"lxml")
+table = soup.find("div", {"id":"Main"}).find("table", {"class": "historical-prices"})
+data = []
+trs = table.find_all("tr")
+for tr in trs:
+cells = tr.find_all(["th", "td"])
+row = []
+for cell in cells:
+row.append(cell.text.strip("*"))
+data.append(row)
+
+Copy code
+df = pd.DataFrame(data[1:61], columns = data[0])
+df = df.set_index(keys="日期")
+
+return df
+def main():
+yfh = YahooFinanceHistory_60days()
+code = input("请输入股票代码：")
+df = yfh.get_data(code)
+
+获取当地时间
+now = datetime.datetime.now()
+print("当地时间：", now)
+
+计算读取网页所需时间
+start = time.time()
+df = yfh.get_data(code)
+end = time.time()
+print("读取网页所需时间：", end - start)
+
+将Dataframe转化为Csv格式并保存
+root = tk.Tk()
+root.withdraw()
+filepath = filedialog.asksaveasfilename(title="保存股票历史数据", initialdir=os.getcwd(), initialfile="stock_history.csv", filetypes=[("csv files",".csv")])
+df.to_csv(filepath)
+print("成功保存到：", filepath)
+
+if name == "main":
+main()
