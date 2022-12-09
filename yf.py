@@ -9,6 +9,7 @@ import time
 
 class YahooFinanceHistory_60days:
   _url = 'https://hk.finance.yahoo.com/quote/{code}.HK/history?p={code}.HK'
+  start_time = time.time()
   
   def get_data(self, data):
     url = self._url.format(code = code)
@@ -29,5 +30,4 @@ class YahooFinanceHistory_60days:
     df = df.set_index(keys="日期")
     
     return df
-    
-
+elapased_time = time.time() - start_time
